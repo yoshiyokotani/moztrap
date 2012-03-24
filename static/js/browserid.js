@@ -13,6 +13,10 @@ var CC = (function (CC, $) {
             }
         });
     };
-});
+
+    return CC;
+
+}(CC || {}, jQuery));
+
 
 
