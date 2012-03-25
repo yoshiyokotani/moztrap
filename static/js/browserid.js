@@ -10,20 +10,31 @@ var CC = (function (CC, $) {
             },
             gotAssertion = function (assertion) {
                 if (assertion !== null) {
-                    alert("asserted")
-                /*    $.ajax({
-                               type: 'POST',
-                               url: '/login/login',
-                               data: { assertion: assertion },
-                               success: function(res, status, xhr) {
-                                   if (res === null) loggedOut();
-                                   else loggedIn(res);
-                               },
-                               error: function(xhr, status, error) {
-                                   alert("login failure " + error);
-                               }
-                           });
-                           */
+                    alert(assertion + "");
+                    $.post(
+                        "https://browserid.org/verify",
+                        {assertion: assertion,
+                         audience: {{STATIC_URL}}
+                        },
+                        function(responseText){
+                            $("#result").html(responseText);
+                        },
+                        "html"
+                    );
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/login/login',
+                        data: { assertion: assertion },
+                        success: function(res, status, xhr) {
+                            if (res === null) loggedOut();
+                            else loggedIn(res);
+                        },
+                        error: function(xhr, status, error) {
+                            alert("login failure " + error);
+                        }
+                    });
                 }
                 else {
                     alert("nope();")
