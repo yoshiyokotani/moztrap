@@ -49,8 +49,9 @@ def login(request):
     return auth_views.login(request, **kwargs)
 
 
-def login_browserId(request):
-    pass
+def login_browserid(request):
+    return auth_views.logout_then_login(request)
+
 
 
 def logout(request):
