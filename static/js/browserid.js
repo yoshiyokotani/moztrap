@@ -2,21 +2,41 @@ var CC = (function (CC, $) {
 
     'use strict';
 
-    // hide empty run-tests environments form on initial load
-    CC.browseridLogin = function () {
-        navigator.id.get(function (assertion) {
-            if (assertion) {
-                // This code will be invoked once the user has successfully
-                // selected an email address they control to sign in with.
-            } else {
-                // something went wrong!  the user isn't logged in.
-            }
+
+    CC.browseridLogin = function (container) {
+        var context = $(container),
+            getAssertion = function () {
+                navigator.id.get(gotAssertion);
+            },
+            gotAssertion = function (assertion) {
+                if (assertion !== null) {
+                    alert("asserted")
+                /*    $.ajax({
+                               type: 'POST',
+                               url: '/login/login',
+                               data: { assertion: assertion },
+                               success: function(res, status, xhr) {
+                                   if (res === null) loggedOut();
+                                   else loggedIn(res);
+                               },
+                               error: function(xhr, status, error) {
+                                   alert("login failure " + error);
+                               }
+                           });
+                           */
+                }
+                else {
+                    alert("nope();")
+                }
+            };
+        context.find('.browserid').click(function (e) {
+            e.preventDefault();
+            getAssertion();
         });
     };
+
 
     return CC;
 
 }(CC || {}, jQuery));
-
-
 

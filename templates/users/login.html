@@ -35,21 +35,8 @@
   </form>
 
   <div>
-      <button onclick="browserid_login()">BrowserID</button>
+      <button class="browserid">BrowserID</button>
   </div>
 </section>
 
-<script src="https://browserid.org/include.js" type="text/javascript"></script>
-<script>
-    function browserid_login() {
-        navigator.id.get(function(assertion) {
-            if (assertion) {
-                // This code will be invoked once the user has successfully
-                // selected an email address they control to sign in with.
-            } else {
-                // something went wrong!  the user isn't logged in.
-            }
-        });
-    }
-</script>
 {% endblock content %}

@@ -219,6 +219,9 @@ var CC = (function (CC, $) {
         CC.failedTestBug('#runtests');
         CC.expandTestDetails('#runtests');
         CC.filterEnvironments('#runtests-environment-form');
+
+        //login.js
+        CC.browseridLogin('#login');
     });
 
     $(window).load(function () {

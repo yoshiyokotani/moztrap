@@ -30,6 +30,7 @@ urlpatterns = patterns(
     # auth -------------------------------------------------------------------
 
     url(r"^login/", "login", name="auth_login"),
+   # url(r"^loginbrowserid/", "login_browserid", name="auth_browserid_login"),
     url(r"^logout/", "logout", name="auth_logout"),
     url(r"^password/change/$", "password_change", name="auth_password_change"),
     url(r"^password/reset/$", "password_reset", name="auth_password_reset"),
