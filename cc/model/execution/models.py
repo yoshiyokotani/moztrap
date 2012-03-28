@@ -163,6 +163,9 @@ class Run(CCModel, TeamModel, DraftStatusModel, HasEnvironmentsModel):
         except ZeroDivisionError:
             return 0
 
+# Runs should always default to draft, where other objects should default
+# to active.  So override the active default here.
+Run._meta.get_field_by_name("status")[0].default = Run.STATUS.draft
 
 
 def _environment_intersection(run, caseversion):

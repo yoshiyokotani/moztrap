@@ -136,6 +136,9 @@ class BaseAddCaseForm(forms.Form):
                 choice_attrs=ccforms.product_id_attrs,
                 required=False)
 
+        # new cases default to active
+        self.fields["status"].initial = "active"
+
 
     def clean(self):
         """Verify that products all match up."""

@@ -405,7 +405,7 @@ class DraftStatusModel(models.Model):
     STATUS = Choices("draft", "active", "disabled")
 
     status = models.CharField(
-        max_length=30, db_index=True, choices=STATUS, default=STATUS.draft)
+        max_length=30, db_index=True, choices=STATUS, default=STATUS.active)
 
 
     def activate(self, user=None):

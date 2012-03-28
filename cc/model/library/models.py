@@ -211,8 +211,6 @@ class CaseVersion(CCModel, DraftStatusModel, HasEnvironmentsModel):
             )
 
 
-CaseVersion._meta.get_field_by_name("status")[0].default = CaseVersion.STATUS.active
-
 
 class CaseAttachment(Attachment):
     caseversion = models.ForeignKey(CaseVersion, related_name="attachments")
@@ -286,8 +284,6 @@ class Suite(CCModel, DraftStatusModel):
     class Meta:
         permissions = [("manage_suites", "Can add/edit/delete test suites.")]
 
-
-Suite._meta.get_field_by_name("status")[0].default = Suite.STATUS.active
 
 
 class SuiteCase(CCModel):
