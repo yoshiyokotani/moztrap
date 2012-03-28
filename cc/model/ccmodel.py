@@ -402,10 +402,23 @@ class DraftStatusModel(models.Model):
     Also provides ``activate`` and ``deactivate`` model methods.
 
     """
+
     STATUS = Choices("draft", "active", "disabled")
+    DEFAULT_STATUS = STATUS.draft
+
+
+    @classmethod
+    def get_default_status(cls):
+        return cls.DEFAULT_STATUS
+
+
 
     status = models.CharField(
-        max_length=30, db_index=True, choices=STATUS, default=STATUS.active)
+        max_length=30,
+        db_index=True,
+        choices=STATUS,
+        default=get_default_status,
+        )
 
 
     def activate(self, user=None):

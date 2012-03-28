@@ -100,6 +100,8 @@ class CaseVersion(CCModel, DraftStatusModel, HasEnvironmentsModel):
     # True if this case's envs have been narrowed from the product version.
     envs_narrowed = models.BooleanField(default=False)
 
+    DEFAULT_STATUS = DraftStatusModel.STATUS.active
+
 
     def __unicode__(self):
         return self.name
@@ -266,6 +268,8 @@ class Suite(CCModel, DraftStatusModel):
 
     cases = models.ManyToManyField(
         Case, through="SuiteCase", related_name="suites")
+
+    DEFAULT_STATUS = DraftStatusModel.STATUS.active
 
 
     def __unicode__(self):
