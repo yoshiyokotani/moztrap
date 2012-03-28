@@ -269,8 +269,6 @@ class Suite(CCModel, DraftStatusModel):
     cases = models.ManyToManyField(
         Case, through="SuiteCase", related_name="suites")
 
-    DEFAULT_STATUS = DraftStatusModel.STATUS.active
-
 
     def __unicode__(self):
         return self.name
