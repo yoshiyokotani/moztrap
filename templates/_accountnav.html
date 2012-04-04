@@ -18,8 +18,15 @@
       {% endif %}
       {# @@@ <li><a href="#">Account Settings</a></li> #}
     {% else %}
-      <li><a href="{% url auth_login %}?next={{ request.path }}" class="signin">Sign In</a></li>
-      {% if not USE_BROWSERID %}
+      {% if USE_BROWSERID %}
+        <li><a id="browserid" href="#">Sign In / Register</a></li>
+        <form method="POST" action="{% url browserid_verify %}" id="browserid-form">
+          {% csrf_token %}
+          <input type="hidden" name="assertion" id="id_assertion" />
+          <input type="hidden" name="next" id="id_next" value="{{ request.path }}" />
+        </form>
+      {% else %}
+        <li><a href="{% url auth_login %}?next={{ request.path }}" class="signin">Sign In</a></li>
         <li><a href="{% url registration_register %}">Register</a></li>
       {% endif %}
     {% endif %}
