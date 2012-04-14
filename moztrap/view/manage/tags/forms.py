@@ -45,3 +45,64 @@ class EditTagForm(TagForm):
 class AddTagForm(TagForm):
     """Form for adding a tag."""
     pass
+
+
+
+class ApplyTagForm():
+    """
+    Base form for all forms that handle tags.
+
+    Provides tags fields, and non-field-errors-class
+    mixin.
+
+    """
+
+    add_tags = forms.CharField(
+        widget=mtforms.AutocompleteInput(
+            url=lambda: reverse("manage_tags_autocomplete")),
+        required=False)
+
+
+    def __init__(self, *args, **kwargs):
+        """Initialize form; pull out user from kwargs, set up data-allow-new."""
+        self.user = kwargs.pop("user", None)
+
+        super(ApplyTagForm, self).__init__(*args, **kwargs)
+
+        self.fields["add_tags"].widget.attrs["data-allow-new"] = (
+            "true"
+            if (self.user and self.user.has_perm("tags.manage_tags"))
+            else "false"
+            )
+
+
+    def clean(self):
+        """Can't create new tags without appropriate permissions."""
+        if (self.data.get("tag-newtag") and
+            not (self.user and self.user.has_perm("tags.manage_tags"))):
+            raise forms.ValidationError(
+                "You do not have permission to create new tags.")
+        return self.cleaned_data
+
+
+    def save_new_tags(self, product=None):
+        """Save new tags and add them to the list of tags to assign."""
+        tags = self.cleaned_data.setdefault("tags", set())
+        tags.update([int(tid) for tid in self.data.getlist("tag-tag")])
+
+        new_tags = self.data.getlist("tag-newtag")
+
+        for name in new_tags:
+            # @@@ should pass in user here, need MTQuerySet.get_or_create
+            t, created = model.Tag.objects.get_or_create(
+                name=name, product=product)
+            tags.add(t.id)
+
+
+    def save_tags(self, caseversion):
+        """Update set of tags assigned to ``caseversion``."""
+        tags = self.cleaned_data.get("tags", set())
+
+        current_tags = set([t.id for t in caseversion.tags.all()])
+        caseversion.tags.add(*tags.difference(current_tags))
+        caseversion.tags.remove(*current_tags.difference(tags))
