@@ -48,12 +48,11 @@ class AddTagForm(TagForm):
 
 
 
-class ApplyTagForm():
+class ApplyTagForm(object):
     """
     Base form for all forms that handle tags.
 
-    Provides tags fields, and non-field-errors-class
-    mixin.
+    Provides tags fields.
 
     """
 
