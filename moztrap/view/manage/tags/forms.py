@@ -29,6 +29,7 @@ class EditTagForm(TagForm):
         """Initialize form; restrict tag product choices."""
         super(EditTagForm, self).__init__(*args, **kwargs)
 
+        # TODO: genericize for runs and cases
         products_tagged = model.Product.objects.filter(
             cases__versions__tags=self.instance).distinct()
         count = products_tagged.count()
@@ -98,10 +99,15 @@ class ApplyTagForm(object):
             tags.add(t.id)
 
 
-    def save_tags(self, caseversion):
-        """Update set of tags assigned to ``caseversion``."""
+    def save_tags(self, tagged_object):
+        """
+        Update set of tags assigned to ``tagged_object``.
+
+        ``tagged_object`` must have a ``tags`` field
+        """
         tags = self.cleaned_data.get("tags", set())
 
-        current_tags = set([t.id for t in caseversion.tags.all()])
-        caseversion.tags.add(*tags.difference(current_tags))
-        caseversion.tags.remove(*current_tags.difference(tags))
+        current_tags = set([t.id for t in tagged_object.tags.all()])
+
+        tag_owner.tags.add(*tags.difference(current_tags))
+        tag_owner.tags.remove(*current_tags.difference(tags))

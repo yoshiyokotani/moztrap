@@ -39,11 +39,10 @@ class RunForm(mtforms.NonFieldErrorsClassFormMixin,
 
     class Meta:
         model = model.Run
-        fields = ["productversion", "name", "description", "tags", "start", "end"]
+        fields = ["productversion", "name", "description", "start", "end"]
         widgets = {
             "name": forms.TextInput,
             "description": mtforms.BareTextarea,
-            "tags": forms.TextInput,
             "start": forms.DateInput,
             "end": forms.DateInput,
             }
