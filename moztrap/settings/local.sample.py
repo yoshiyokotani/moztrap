@@ -56,7 +56,15 @@ Copy local.sample.py to local.py and modify as needed.
 # A unique (and secret) key for this deployment.
 #SECRET_KEY = "replace this with some random characters"
 
-# A dictionary of keys to use in password hashing.
+# A dictionary of shared keys for use in password hashing. Must not be empty.
+# The keys in this dictionary are arbitrary string identifiers, the value is
+# the HMAC shared key (which can be any random string). The shared key used for
+# hashing new passwords will be the one associated with whichever identifier
+# evaluates as lexicographically "last"; thus using dates in YYYY-MM-DD format
+# as the identifier is natural. Any shared key found in this dictionary is
+# available for use when checking passwords; thus if you remove any shared key
+# from this dictionary (or change its identifier), any passwords hashed with
+# that key will no longer be usable.
 #HMAC_KEYS = {
 #    "2011-12-13": "replace this with some random characters"
 #}
@@ -95,10 +103,11 @@ Copy local.sample.py to local.py and modify as needed.
 #COMPRESS_OFFLINE = True
 
 # Uncomment this (and modify LOCATION appropriately) to use memcached rather
-# than local-memory cache. See
-# http://docs.djangoproject.com/en/dev/topics/cache/ for more configuration
-# options. For faster caching, install pylibmc in place of python-memcached and
-# replace MemcachedCache with PyLibMCCache.
+# than local-memory cache. This (or some other out-of-process cache backend) is
+# required if running MozTrap under a multi-process webserver such as
+# Apache/mod_wsgi. See http://docs.djangoproject.com/en/dev/topics/cache/ for
+# more configuration options. For faster caching, install pylibmc in place of
+# python-memcached and replace MemcachedCache with PyLibMCCache.
 #CACHES = {
 #    "default": {
 #        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",

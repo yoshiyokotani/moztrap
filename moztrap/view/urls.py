@@ -8,6 +8,9 @@ from django.conf import settings
 
 from django.contrib import admin
 
+from moztrap.model import mtadmin
+
+admin.site = mtadmin.MTAdminSite()
 admin.autodiscover()
 
 import session_csrf
@@ -36,4 +39,7 @@ urlpatterns = patterns(
     # browserid --------------------------------------------------------------
     url(r"^browserid/", include("moztrap.view.users.browserid_urls")),
 
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # open web apps-----------------------------------------------------------
+    url("^owa/", include("moztrap.view.owa.urls")),
+
+    ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
