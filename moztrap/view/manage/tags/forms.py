@@ -103,11 +103,12 @@ class ApplyTagForm(object):
         """
         Update set of tags assigned to ``tagged_object``.
 
-        ``tagged_object`` must have a ``tags`` field
+        ``tagged_object`` must have a ``tags`` field to be able to
+        add and remove tags.
         """
         tags = self.cleaned_data.get("tags", set())
 
         current_tags = set([t.id for t in tagged_object.tags.all()])
 
-        tag_owner.tags.add(*tags.difference(current_tags))
-        tag_owner.tags.remove(*current_tags.difference(tags))
+        tagged_object.tags.add(*tags.difference(current_tags))
+        tagged_object.tags.remove(*current_tags.difference(tags))
