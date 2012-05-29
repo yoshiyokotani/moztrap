@@ -2,6 +2,9 @@
 Management forms for tags.
 
 """
+
+from django.core.urlresolvers import reverse
+
 import floppyforms as forms
 
 from .... import model
@@ -49,7 +52,7 @@ class AddTagForm(TagForm):
 
 
 
-class ApplyTagForm(object):
+class ApplyTagsFormMixin(object):
     """
     Base form for all forms that handle tags.
 
@@ -57,18 +60,16 @@ class ApplyTagForm(object):
 
     """
 
-    add_tags = forms.CharField(
-        widget=mtforms.AutocompleteInput(
-            url=lambda: reverse("manage_tags_autocomplete")),
-        required=False)
-
-
     def __init__(self, *args, **kwargs):
         """Initialize form; pull out user from kwargs, set up data-allow-new."""
         self.user = kwargs.pop("user", None)
 
-        super(ApplyTagForm, self).__init__(*args, **kwargs)
+        super(ApplyTagsFormMixin, self).__init__(*args, **kwargs)
 
+        self.fields["add_tags"] = forms.CharField(
+            widget=mtforms.AutocompleteInput(
+                url=lambda: reverse("manage_tags_autocomplete")),
+            required=False)
         self.fields["add_tags"].widget.attrs["data-allow-new"] = (
             "true"
             if (self.user and self.user.has_perm("tags.manage_tags"))
@@ -103,8 +104,9 @@ class ApplyTagForm(object):
         """
         Update set of tags assigned to ``tagged_object``.
 
-        ``tagged_object`` must have a ``tags`` field to be able to
-        add and remove tags.
+        ``tagged_object`` must have a many to many relationship with the
+        Tag model.
+
         """
         tags = self.cleaned_data.get("tags", set())
 

@@ -7,14 +7,14 @@ import floppyforms as forms
 from moztrap import model
 from moztrap.view.lists import filters
 from moztrap.view.utils import mtforms
-from ..tags.forms import ApplyTagForm
+from ..tags.forms import ApplyTagsFormMixin
 
 
 
 
 class RunForm(mtforms.NonFieldErrorsClassFormMixin,
               mtforms.MTModelForm,
-              ApplyTagForm,
+              ApplyTagsFormMixin,
               ):
     """Base form for adding/editing runs."""
     suites = mtforms.MTModelMultipleChoiceField(
