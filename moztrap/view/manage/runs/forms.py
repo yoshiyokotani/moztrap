@@ -13,8 +13,8 @@ from ..tags.forms import ApplyTagsFormMixin
 
 
 class RunForm(mtforms.NonFieldErrorsClassFormMixin,
-              mtforms.MTModelForm,
               ApplyTagsFormMixin,
+              mtforms.MTModelForm,
               ):
     """Base form for adding/editing runs."""
     suites = mtforms.MTModelMultipleChoiceField(
