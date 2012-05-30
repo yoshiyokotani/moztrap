@@ -58,7 +58,7 @@ class RunForm(mtforms.NonFieldErrorsClassFormMixin,
             model.RunSuite.objects.create(
                 run=run, suite=suite, order=i, user=user)
 
-        self.save_new_tags(product)
+        self.save_new_tags(self.instance.product)
         self.save_tags(self.instance)
 
         return run
