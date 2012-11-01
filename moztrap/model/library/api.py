@@ -6,8 +6,10 @@ from django.http import HttpResponse
 
 from .models import CaseVersion, Case, Suite, CaseStep, SuiteCase
 from ..environments.api import EnvironmentResource
-from ..core.api import ProductVersionResource
+from ..core.api import (ProductResource, ProductVersionResource,
+                        ReportResultsAuthorization, MTApiKeyAuthentication)
 from ..tags.api import TagResource
+
 
 
 class SuiteResource(ModelResource):
@@ -24,7 +26,7 @@ class SuiteResource(ModelResource):
 
 class CaseResource(ModelResource):
     suites = fields.ToManyField(SuiteResource, "suites", full=True)
-
+    product = fields.ForeignKey(ProductResource, "product")
     class Meta:
         queryset = Case.objects.all()
         fields= ["id", "suites"]
@@ -35,11 +37,15 @@ class CaseResource(ModelResource):
 
 
 class CaseStepResource(ModelResource):
+    caseversion = fields.ForeignKey(
+        "moztrap.model.library.api.CaseVersionResource",
+        "caseversion",
+        )
 
 
     class Meta:
         queryset = CaseStep.objects.all()
-        fields = ["instruction", "expected"]
+        fields = ["number", "instruction", "expected"]
 
 
 
@@ -54,7 +60,7 @@ class CaseVersionResource(ModelResource):
 
     class Meta:
         queryset = CaseVersion.objects.all()
-        list_allowed_methods = ['get']
+        list_allowed_methods = ["get", "put", "post"]
         fields = ["id", "name", "description", "case"]
         filtering = {
             "environments": ALL,
@@ -62,6 +68,8 @@ class CaseVersionResource(ModelResource):
             "case": ALL_WITH_RELATIONS,
             "tags": ALL_WITH_RELATIONS,
             }
+        authentication = MTApiKeyAuthentication()
+        authorization = ReportResultsAuthorization()
 
 
 
