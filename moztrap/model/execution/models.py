@@ -6,6 +6,7 @@ import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import connection, models
+from django.db.transaction import commit_on_success
 
 from model_utils import Choices
 
@@ -86,6 +87,7 @@ class Run(MTModel, TeamModel, DraftStatusModel, HasEnvironmentsModel):
         return super(Run, self).clone(*args, **kwargs)
 
 
+#    @commit_on_success
     def activate(self, *args, **kwargs):
         """Make run active, locking in runcaseversions for all suites."""
         if self.status == self.STATUS.draft:
@@ -93,12 +95,28 @@ class Run(MTModel, TeamModel, DraftStatusModel, HasEnvironmentsModel):
         super(Run, self).activate(*args, **kwargs)
 
 
-    def _lock_case_versions(self):
+    def _lock_case_versions(self, envs=None):
         """Select caseversions from suites, create runcaseversions."""
         order = 1
         rcv_ids = set()
         preexisting_rcv_ids = set(
             self.runcaseversions.values_list("id", flat=True))
+        if not envs:
+            envs = self.environments.values_list("id", flat=True)
+        # approach:
+        # loop on environments first
+        # fetch existing - may need to delete them all, because
+        # the order won't be set right.  could delete them all
+        # in a transaction, too.
+
+        # for each env, gather the caseversions for that env
+        # use django 1.4 so I can prefetch_related in the m2m relationships
+        # to get all the data I need
+        # use a transaction and do all the inserts at once
+            # I can't batch it, because no support for batching in
+            # m2m in django, though.
+
+
         for runsuite in RunSuite.objects.filter(
                 run=self, suite__status=Suite.STATUS.active).order_by(
                 "order").select_related("suite"):
