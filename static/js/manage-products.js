@@ -2,7 +2,9 @@
             indent:     4,
             confusion:  true,
             regexp:     true */
-/*global    ich, jQuery, confirm */
+/*global    ich, jQuery, confirm, Backbone */
+/*jshint devel:true */
+
 
 var MT = (function (MT, $) {
 
@@ -69,7 +71,7 @@ var MT = (function (MT, $) {
                 if ((options.optional || options.no_default) && key) {
                     target.find(options.option_sel).filter(function () { return $(this).val(); }).remove();
                     target.append(newopts);
-                    if (options.no_default && newopts.length == 1) {
+                    if (options.no_default && newopts.length === 1) {
                         newopts.attr("selected", true);
                     }
                 } else {
@@ -158,7 +160,7 @@ var MT = (function (MT, $) {
             // in a bulleted list.
             //
             if ($(options.container).find(".multiselect").length) {
-                $(function() {
+                $(function () {
                     // the field items are filtered on (usu. product or productversion)
                     var trigger = $(options.trigger_field);
                     var trigger_id;
@@ -210,11 +212,11 @@ var MT = (function (MT, $) {
                     type: "GET",
                     url: url,
                     context: document.body,
-                    beforeSend: function() {
+                    beforeSend: function () {
                         unselect.loadingOverlay();
                         select.loadingOverlay();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         /*
                             This ajax call will fetch 2 lists of items.  It will look
                             like this:
@@ -233,9 +235,9 @@ var MT = (function (MT, $) {
                         select.loadingOverlay("remove");
 
                         cache[url] = {sel_html: sel_html, unsel_html: unsel_html};
-                        setHtmlInMultiselect(sel_html, unsel_html)
+                        setHtmlInMultiselect(sel_html, unsel_html);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         $(".multiselected").loadingOverlay("remove");
                         $(".multiunselected").loadingOverlay("remove");
                         console.error(response);
