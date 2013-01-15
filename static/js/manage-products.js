@@ -2,8 +2,7 @@
             indent:     4,
             confusion:  true,
             regexp:     true */
-/*global    ich, jQuery, confirm, Backbone */
-/*jshint devel:true */
+/*global    ich, jQuery, confirm, URI, Backbone */
 
 
 var MT = (function (MT, $) {

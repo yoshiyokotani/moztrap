@@ -2,6 +2,7 @@
 List filtering options.
 
 """
+from model_utils import Choices
 from moztrap import model
 
 from .lists import filters
@@ -65,6 +66,7 @@ class RunFilterSet(filters.FilterSet):
         filters.ChoicesFilter(
             "is Series",
             lookup="is_series",
+            key="is_series",
             choices=[(1, "series"), (0, "individual")],
             coerce=int,
             ),
@@ -85,6 +87,13 @@ class RunCaseVersionFilterSet(filters.FilterSet):
             "status",
             lookup="caseversion__status",
             choices=model.CaseVersion.STATUS),
+        filters.ChoicesFilter(
+            "result status",
+            key="resultstatus",
+            lookup="results__status",
+            extra_filters={"results__is_latest": True},
+            choices=Choices(*model.Result.COMPLETED_STATES),
+            ),
         filters.KeywordExactFilter(
             "id", lookup="caseversion__case__id", coerce=int),
         filters.KeywordFilter("name", lookup="caseversion__name"),
@@ -174,6 +183,12 @@ class SuiteFilterSet(filters.FilterSet):
         filters.ChoicesFilter("status", choices=model.Suite.STATUS),
         filters.ModelFilter("product", queryset=model.Product.objects.all()),
         filters.ModelFilter(
+            "product version",
+            lookup="product__versions",
+            key="productversion",
+            queryset=model.ProductVersion.objects.all(),
+            ),
+        filters.ModelFilter(
             "run",
             lookup="runs",
             queryset=model.Run.objects.all()
@@ -229,6 +244,12 @@ class TagFilterSet(filters.FilterSet):
     filters = [
         filters.KeywordFilter("name"),
         filters.ModelFilter("product", queryset=model.Product.objects.all()),
+        filters.ModelFilter(
+            "product version",
+            lookup="product__versions",
+            key="productversion",
+            queryset=model.ProductVersion.objects.all(),
+            ),
         filters.ModelFilter(
             "creator", lookup="created_by", queryset=model.User.objects.all()),
         ]
