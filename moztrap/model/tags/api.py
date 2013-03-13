@@ -65,7 +65,7 @@ class TagResource(MTResource):
                         logger.debug('changing from global to product-specific')
                         # if existing caseversions represent more than one
                         # product
-                        desired_product_id = desired_product.split('/')[-2]
+                        desired_product_id = self._id_from_uri(desired_product)
                         if len(products) > 1:
                             logger.exception(err_msg)
                             raise ImmediateHttpResponse(
@@ -82,7 +82,7 @@ class TagResource(MTResource):
                         else:
                             logger.debug(
                                 "product matches caseversions' product")
-                    else: # changing from product-specific to global
+                    else:  # changing from product-specific to global
                         logger.debug("changing from product-specific to global")
                 else:
                     logger.debug("not changing product")
@@ -93,4 +93,3 @@ class TagResource(MTResource):
 
         return super(TagResource, self).obj_update(
             bundle=bundle, request=request, **kwargs)
-
