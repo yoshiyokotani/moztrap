@@ -3,6 +3,10 @@
 How To Do Some Common Tasks
 ===========================
 
+.. contents::
+   :depth: 1
+   :local:
+
 Create a new Product Version for an existing Product
 ----------------------------------------------------
 
@@ -15,21 +19,7 @@ on the fields in that screen.
 
 Steps
 ^^^^^
-    #. navigate to ``Manage | Versions``
-    #. click the "create a version" button
-    #. set the product to the product in question
-    #. specify the version to copy Environments and Cases from.  In our case,
-       this will be ``1.0``
-    #. type in the name of the new Version.  In our case: ``2.0``
-    #. codename is optional.
-    #. click the "save productversion" button
-
-Result
-^^^^^^
-Now you will have a new product version, and a new ``2.0`` version of each test
-case.  If you change the ``2.0`` version of a case, the ``1.0`` version remains
-unchanged.  This is so that the steps in your test can evolve as your product
-does without changing the tests that applied to earlier versions.
+See Tutorial: :ref:`New Version<new-product-version>`
 
 
 Fill in test cases missing from one Product Version into another
@@ -80,3 +70,45 @@ Result
 ^^^^^^
 All test cases in 1.0 now have a 2.0 version.  If a 2.0 version already existed
 for a case, it will NOT replace it.
+
+
+Migrate a test run to a new Product Version
+-------------------------------------------
+
+Situation
+^^^^^^^^^
+You have an existing Product, Version 1.0 along with
+test cases, suites, runs, etc.  You created version 2.0 of the product and
+want to run some of the same test runs against from 1.0 against 2.0.  You
+will need to clone the 1.0 test runs to 2.0 and update them.
+
+Steps
+^^^^^
+See Tutorial: :ref:`Migrate Runs<migrate-runs>`
+
+
+Get a link to a result of a test just after submitting it
+---------------------------------------------------------
+
+Situation
+^^^^^^^^^
+You are executing a test run and find a bug.  You want to submit the bug, and
+then provide a link to the result in your bug report.  Or perhaps you just want
+to email that link to someone.
+
+Steps for solution 1
+^^^^^^^^^^^^^^^^^^^^
+    #. run the test run
+    #. mark the case with the result you found
+    #. If, for example, the case was marked "Failed," then click the red button that says:
+        * |case_result|
+
+Result
+^^^^^^
+You are taken to the result for that test case.  You will also see any result
+that other users have submitted for the same case in that environment.
+
+.. |case_result| image:: img/case_result.png
+    :height: 40px
+
+

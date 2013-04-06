@@ -1,24 +1,26 @@
 """
-Tests for EnvironmentResource api.
+Tests for ProfileResource api.
 
 """
 
 from tests.case.api.crud import ApiCrudCases
 
+import logging
+mozlogger = logging.getLogger('moztrap.test')
 
 
-class CategoryResourceTest(ApiCrudCases):
+class ProfileResourceTest(ApiCrudCases):
 
     @property
     def factory(self):
         """The model factory for this object."""
-        return self.F.CategoryFactory()
+        return self.F.ProfileFactory()
 
 
     @property
     def resource_name(self):
         """The resource name for this object."""
-        return "category"
+        return "profile"
 
 
     @property
@@ -38,8 +40,7 @@ class CategoryResourceTest(ApiCrudCases):
         modifiers = (self.datetime, self.resource_name)
 
         return {
-            u"name": u"category %s %s" % modifiers,
-            u"elements": [],
+            u"name": u"profile %s %s" % modifiers,
         }
 
 
@@ -47,7 +48,7 @@ class CategoryResourceTest(ApiCrudCases):
         """Returns the object from the backend, so you can query it's values in
         the database for validation.
         """
-        return self.model.Category.everything.get(id=id)
+        return self.model.Profile.everything.get(id=id)
 
 
     def backend_data(self, backend_obj):
@@ -62,11 +63,4 @@ class CategoryResourceTest(ApiCrudCases):
             u"name": unicode(backend_obj.name),
             u"resource_uri": unicode(
                 self.get_detail_url(self.resource_name, str(backend_obj.id))),
-            u"elements": [{
-                              u"name": unicode(elem.name),
-                              u"id": unicode(elem.id),
-                              u"resource_uri": unicode(self.get_detail_url(
-                                  "element", str(elem.id)
-                              )),
-                            } for elem in backend_obj.elements.all()]
             }
